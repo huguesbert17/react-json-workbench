@@ -199,7 +199,7 @@
     color: var(--text);
 }
 .rjv-tree {
-    padding: 8px 10px 8px 25px;
+    padding: 8px 10px 8px 10px;
     overflow: auto;
 }
 .rjv-node {
