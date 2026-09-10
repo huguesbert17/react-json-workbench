@@ -1,7 +1,7 @@
 {
   "name": "@huguesbert17/react-json-viewer-editor",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "description": "A lightweight, dependency-free JSON viewer and editor for React + TypeScript. It provides tree and text views, syntax highlighting, inline editing, search, copy/download actions, light and dark themes, and extensible hover ribbons for node-level actions.",
   "keywords": [
     "json"
