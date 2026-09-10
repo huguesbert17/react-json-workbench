@@ -1,0 +1,313 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111827;
+  background: #f6f7f9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% -8%, rgba(99, 102, 241, .08), transparent 28rem),
+    #f6f7f9;
+}
+
+button, input, select { font: inherit; }
+button { color: inherit; }
+
+.playground-shell {
+  min-height: 100vh;
+}
+
+.playground-topbar {
+  height: 64px;
+  padding: 0 28px;
+  border-bottom: 1px solid #e5e7eb;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.playground-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.playground-logo {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d8dbe2;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16,24,40,.05);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+}
+
+.playground-topbar-copy {
+  font-size: 12px;
+  color: #667085;
+  font-weight: 500;
+}
+
+.playground-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  min-height: calc(100vh - 64px);
+}
+
+.playground-controls {
+  border-right: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 22px 18px 40px;
+  overflow-y: auto;
+}
+
+.playground-controls-header {
+  padding: 0 6px 18px;
+  border-bottom: 1px solid #eef0f3;
+  margin-bottom: 18px;
+}
+
+.playground-controls-header h1 {
+  font-size: 18px;
+  line-height: 1.25;
+  margin: 0 0 6px;
+  letter-spacing: -.025em;
+}
+
+.playground-controls-header p {
+  margin: 0;
+  color: #667085;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.control-section {
+  padding: 0 6px 20px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #eef0f3;
+}
+
+.control-section:last-child { border-bottom: 0; }
+
+.control-section-title {
+  margin: 0 0 12px;
+  color: #98a2b3;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid #e4e7ec;
+  border-radius: 9px;
+  background: #f8fafc;
+}
+
+.segmented button {
+  height: 31px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #667085;
+}
+
+.segmented button.active {
+  background: #fff;
+  color: #101828;
+  box-shadow: 0 1px 3px rgba(16,24,40,.10), 0 1px 2px rgba(16,24,40,.06);
+}
+
+.control-row {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.control-row + .control-row { margin-top: 5px; }
+
+.control-label {
+  color: #344054;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.switch {
+  width: 34px;
+  height: 19px;
+  border: 0;
+  padding: 2px;
+  border-radius: 999px;
+  background: #d0d5dd;
+  cursor: pointer;
+  transition: background .15s ease;
+  flex: 0 0 auto;
+}
+
+.switch::after {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 2px rgba(16,24,40,.22);
+  transform: translateX(0);
+  transition: transform .15s ease;
+}
+
+.switch.on { background: #111827; }
+.switch.on::after { transform: translateX(15px); }
+
+.number-field {
+  width: 64px;
+  height: 30px;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  padding: 0 8px;
+  background: #fff;
+  color: #344054;
+  font-size: 12px;
+  outline: none;
+}
+
+.number-field:focus {
+  border-color: #98a2b3;
+  box-shadow: 0 0 0 3px rgba(152,162,179,.12);
+}
+
+.control-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.subtle-button {
+  height: 31px;
+  border: 1px solid #d0d5dd;
+  background: #fff;
+  border-radius: 7px;
+  padding: 0 10px;
+  cursor: pointer;
+  color: #475467;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.subtle-button:hover { background: #f9fafb; }
+
+.playground-main {
+  min-width: 0;
+  padding: 34px clamp(24px, 5vw, 72px) 64px;
+}
+
+.preview-heading {
+  max-width: 1180px;
+  margin: 0 auto 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+}
+
+.preview-heading h2 {
+  margin: 0 0 5px;
+  font-size: 22px;
+  letter-spacing: -.03em;
+}
+.preview-heading p {
+  margin: 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.preview-card {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px;
+  border: 1px solid #e2e5ea;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16,24,40,.03), 0 14px 36px rgba(16,24,40,.05);
+  overflow: visible;
+}
+
+.preview-card.dark-canvas {
+  background: #111318;
+  border-color: #242832;
+}
+
+.code-panel {
+  max-width: 1180px;
+  margin: 20px auto 0;
+  border: 1px solid #e2e5ea;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.code-panel-header {
+  height: 42px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eef0f3;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475467;
+}
+
+.code-panel pre {
+  margin: 0;
+  padding: 16px;
+  overflow: auto;
+  color: #344054;
+  background: #fbfcfd;
+  font: 11.5px/1.65 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+@media (max-width: 900px) {
+  .playground-layout { grid-template-columns: 1fr; }
+  .playground-controls {
+    border-right: 0;
+    border-bottom: 1px solid #e5e7eb;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+  }
+  .playground-controls-header { grid-column: 1 / -1; }
+  .control-section { margin-bottom: 0; }
+}
+
+@media (max-width: 620px) {
+  .playground-topbar { padding: 0 16px; }
+  .playground-topbar-copy { display: none; }
+  .playground-controls { grid-template-columns: 1fr; }
+  .playground-main { padding: 24px 14px 44px; }
+  .preview-card { padding: 10px; border-radius: 12px; }
+}
