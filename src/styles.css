@@ -179,7 +179,7 @@
     font-size: 12px;
 }
 .rjv-view-area {
-    min-height: 160px;
+    min-height: var(--var-viewer-min-height);
     background: var(--bg);
 }
 .rjv-search {
