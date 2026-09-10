@@ -2,6 +2,7 @@ import { StrictMode, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { JsonWorkbench, type JsonRibbonItem, type JsonValue } from './index';
 import { PathIcon, SearchIcon } from './components/icons';
+import './styles.css';
 import './demo.css';
 
 const INITIAL_DATA: JsonValue = {
