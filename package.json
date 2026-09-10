@@ -1,12 +1,19 @@
 {
   "name": "react-json-workbench",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
-  "description": "A lightweight JSON viewer and editor for React + TypeScript with tree/text views, extensible action ribbons, and a focused CodeMirror 6 JSON editor.",
+  "description": "A lightweight, extensible JSON viewer and editor for React with tree inspection, CodeMirror editing, contextual actions, formatting, and theming.",
   "keywords": [
-    "json"
+    "react",
+    "json",
+    "json-viewer",
+    "json-editor",
+    "json-tree",
+    "codemirror",
+    "typescript",
+    "developer-tools"
   ],
-  "homepage": "https://github.com/huguesbert17/react-json-workbench#readme",
+  "homepage": "https://huguesbert17.github.io/react-json-workbench/",
   "bugs": {
     "url": "https://github.com/huguesbert17/react-json-workbench/issues"
   },
@@ -17,13 +24,37 @@
   "license": "MIT",
   "author": "Hugues",
   "type": "module",
-  "main": "index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "style": "./dist/style.css",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./dist/style.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode demo",
+    "typecheck": "tsc --noEmit",
     "build": "npm run build:lib",
-    "build:lib": "vite build",
+    "build:lib": "vite build && tsc -p tsconfig.build.json",
     "build:demo": "vite build --mode demo",
-    "preview": "vite preview"
+    "preview": "vite preview --mode demo",
+    "prepare": "npm run build:lib",
+    "prepublishOnly": "npm run typecheck && npm run build:lib",
+    "pack:check": "npm pack --dry-run"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.0.0",
@@ -45,5 +76,11 @@
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

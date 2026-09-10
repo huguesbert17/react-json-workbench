@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
-import type { JsonNodeType, JsonRibbonActionGroup, JsonValue, JsonViewerProps, KeyChangeEvent } from '../types';
+import type { JsonNodeType, JsonRibbonActionGroup, JsonValue, JsonWorkbenchProps, KeyChangeEvent } from '../types';
 import { addAtPath, buildNodes, cloneJson, countNodes, deleteAtPath, formatJsonPath, formatNodeValueForCopy, renameAtPath, setAtPath } from '../utils';
 import JsonNode from './JsonNode';
 import CodeMirrorJsonEditor from './CodeMirrorJsonEditor';
 import Ribbon from './Ribbon';
 import { TreeIcon, CodeIcon, ExpandIcon, CollapseIcon, EditIcon, CancelIcon, CopyIcon, DownloadIcon, SearchIcon, MoonIcon, SunIcon, JsonIcon, CheckIcon, PathIcon, FormatIcon } from './icons';
-import '../styles.css';
 
 function formatSize(size: number) {
   if (size < 1024) return `${size} B`;
@@ -99,7 +98,7 @@ function expandNodes(nodes: JsonNodeType[], expanded: boolean): JsonNodeType[] {
   return nodes.map(n => ({ ...n, expanded: (n.type === 'object' || n.type === 'array') ? expanded : n.expanded, children: n.children ? expandNodes(n.children, expanded) : undefined }));
 }
 
-export default function ReactJsonWorkbench({
+export default function JsonWorkbench({
   data,
   onChange,
   editable = true,
@@ -128,7 +127,7 @@ export default function ReactJsonWorkbench({
   onEditSave,
   onEditCancel,
   onThemeChange,
-}: JsonViewerProps) {
+}: JsonWorkbenchProps) {
   const [currentData, setCurrentData] = useState<JsonValue>(() => cloneJson(data));
   const [mode, setMode] = useState<'tree' | 'text'>(defaultMode);
   const [editMode, setEditMode] = useState(false);

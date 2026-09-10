@@ -1,7 +1,6 @@
 import { StrictMode, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import JsonViewer from './components/JsonViewer';
-import type { JsonRibbonItem, JsonValue } from './types';
+import { JsonWorkbench, type JsonRibbonItem, type JsonValue } from './index';
 import { PathIcon, SearchIcon } from './components/icons';
 import './demo.css';
 
@@ -151,7 +150,7 @@ function Demo() {
     if (config.hideThemeButton) props.push('hideThemeButton');
     if (config.hideFormatButton) props.push('hideFormatButton');
 
-    return `<JsonViewer\n  ${props.join('\n  ')}\n/>`;
+    return `<JsonWorkbench\n  ${props.join('\n  ')}\n/>`;
   }, [config]);
 
   const copyExample = async () => {
@@ -247,7 +246,7 @@ function Demo() {
           </div>
 
           <div className={`preview-card ${config.theme === 'dark' ? 'dark-canvas' : ''}`}>
-            <JsonViewer
+            <JsonWorkbench
               key={config.defaultMode}
               data={data}
               onChange={setData}

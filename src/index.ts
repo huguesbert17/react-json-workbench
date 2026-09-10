@@ -1,4 +1,15 @@
-export { default as JsonViewer } from './components/JsonViewer';
-export { default } from './components/JsonViewer';
-export type { JsonViewerProps, JsonNodeType, JsonValue, JsonObject, KeyChangeEvent, JsonRibbonAction, JsonRibbonActionGroup, JsonRibbonItem } from './types';
+export { default as JsonWorkbench } from './components/JsonWorkbench';
+export { default as JsonViewer } from './components/JsonWorkbench';
+export { default } from './components/JsonWorkbench';
+export type {
+  JsonWorkbenchProps,
+  JsonViewerProps,
+  JsonNodeType,
+  JsonValue,
+  JsonObject,
+  KeyChangeEvent,
+  JsonRibbonAction,
+  JsonRibbonActionGroup,
+  JsonRibbonItem,
+} from './types';
 import './styles.css';

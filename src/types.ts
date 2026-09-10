@@ -45,7 +45,7 @@ export interface JsonRibbonActionGroup {
 
 export type JsonRibbonItem = JsonRibbonAction | JsonRibbonActionGroup;
 
-export interface JsonViewerProps {
+export interface JsonWorkbenchProps {
   data: JsonValue;
   onChange?: (data: JsonValue) => void;
   editable?: boolean;
@@ -77,3 +77,6 @@ export interface JsonViewerProps {
   onEditCancel?: () => void;
   onThemeChange?: (theme: 'light' | 'dark') => void;
 }
+
+/** @deprecated Use JsonWorkbenchProps instead. */
+export type JsonViewerProps = JsonWorkbenchProps;
