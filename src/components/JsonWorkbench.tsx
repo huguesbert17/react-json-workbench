@@ -294,28 +294,28 @@ export default function JsonWorkbench({
       <div className="rjv-brand"><JsonIcon /><span>JSON</span></div>
 
       <div className="rjv-toolbar-group right">
-        {!hideTreeControls && mode === 'tree' && <button className="rjv-expand-all" onClick={toggleAll} title={allExpanded ? 'Collapse all' : 'Expand all'}>
+        {!hideTreeControls && mode === 'tree' && <button type="button" className="rjv-expand-all" onClick={toggleAll} title={allExpanded ? 'Collapse all' : 'Expand all'}>
           {allExpanded ? <CollapseIcon /> : <ExpandIcon />}<span>{allExpanded ? 'Collapse all' : 'Expand all'}</span>
         </button>}
 
         {!hideModeSwitcher && <div className="rjv-button-group" aria-label="View mode">
-          <button className={mode === 'tree' ? 'active' : ''} onClick={() => setMode('tree')} title="Tree view" aria-label="Tree view"><TreeIcon /></button>
-          <button className={mode === 'text' ? 'active' : ''} onClick={() => setMode('text')} title="Text view" aria-label="Text view"><CodeIcon /></button>
+          <button type="button" className={mode === 'tree' ? 'active' : ''} onClick={() => setMode('tree')} title="Tree view" aria-label="Tree view"><TreeIcon /></button>
+          <button type="button" className={mode === 'text' ? 'active' : ''} onClick={() => setMode('text')} title="Text view" aria-label="Text view"><CodeIcon /></button>
         </div>}
 
         {!hideEditControls && editable && <div className="rjv-button-group">
-          {!editMode && <button onClick={startEdit} title="Edit JSON" aria-label="Edit JSON"><EditIcon /></button>}
+          {!editMode && <button type="button" onClick={startEdit} title="Edit JSON" aria-label="Edit JSON"><EditIcon /></button>}
           {editMode && <>
-            <button className="save" onClick={save} title="Save changes"><CheckIcon /></button>
-            <button className="danger" onMouseDown={e => e.preventDefault()} onClick={cancel} title="Cancel changes"><CancelIcon /></button>
+            <button type="button" className="save" onClick={save} title="Save changes"><CheckIcon /></button>
+            <button type="button" className="danger" onMouseDown={e => e.preventDefault()} onClick={cancel} title="Cancel changes"><CancelIcon /></button>
           </>}
         </div>}
 
-        {!hideFormatButton && mode === 'text' && <button className="rjv-format" onClick={format} title="Format JSON" aria-label="Format JSON"><FormatIcon />{!hideActionText && <span>Format</span>}</button>}
-        {!hideSearchButton && <button onClick={() => setSearchOpen(v => !v)} title="Search JSON"><SearchIcon /></button>}
-        {!hideDownloadButton && <button onClick={download} title="Download JSON"><DownloadIcon /></button>}
-        {!hideCopyButton && <button onClick={copy} title="Copy JSON"><CopyIcon /></button>}
-        {!hideThemeButton && <button onClick={() => onThemeChange?.(theme === 'light' ? 'dark' : 'light')} title="Toggle theme">{theme === 'light' ? <MoonIcon /> : <SunIcon />}</button>}
+        {!hideFormatButton && mode === 'text' && <button type="button" className="rjv-format" onClick={format} title="Format JSON" aria-label="Format JSON"><FormatIcon />{!hideActionText && <span>Format</span>}</button>}
+        {!hideSearchButton && <button type="button" onClick={() => setSearchOpen(v => !v)} title="Search JSON"><SearchIcon /></button>}
+        {!hideDownloadButton && <button type="button" onClick={download} title="Download JSON"><DownloadIcon /></button>}
+        {!hideCopyButton && <button type="button" onClick={copy} title="Copy JSON"><CopyIcon /></button>}
+        {!hideThemeButton && <button type="button" onClick={() => onThemeChange?.(theme === 'light' ? 'dark' : 'light')} title="Toggle theme">{theme === 'light' ? <MoonIcon /> : <SunIcon />}</button>}
       </div>
     </div>}
 
@@ -323,7 +323,7 @@ export default function JsonWorkbench({
       {searchOpen && <div className="rjv-search">
         <SearchIcon />
         <input autoFocus value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search JSON..." />
-        <button onClick={() => { setSearchOpen(false); setSearchQuery('') }}>
+        <button type="button" onClick={() => { setSearchOpen(false); setSearchQuery('') }}>
           <CancelIcon />
         </button>
       </div>}

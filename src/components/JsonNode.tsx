@@ -93,23 +93,23 @@ export default function JsonNode(props: Props) {
     <div className={`rjv-node-header ${expandable ? 'expandable' : 'leaf'}`} onClick={() => props.onNodeClick?.(node)}>
       <span className="rjv-indent" style={{ width: node.level * 20 }} />
       <span className="rjv-node-anchor">
-      <span className={`rjv-node-content ${highlighted ? 'highlighted' : ''}`}>
-        {expandable && <button className="rjv-chevron" onClick={(e) => { e.stopPropagation(); toggle(); }} disabled={!expandable} aria-label={expanded ? 'Collapse node' : 'Expand node'}>
-          {expandable ? (expanded ? <ChevronDownIcon /> : <ChevronRightIcon />) : null}
-        </button>}
-        <span className={`rjv-key ${editable && node.parentType !== 'array' ? 'editable' : ''}`}>
-          {editingKey ? <input ref={keyRef} className="rjv-inline-input key" value={editKey} onChange={e => setEditKey(e.target.value)} onBlur={saveKey} onKeyDown={e => { if (e.key === 'Enter') saveKey(); if (e.key === 'Escape') setEditingKey(false); }} /> :
-            <span onDoubleClick={() => { if (editable && node.parentType !== 'array') { setEditKey(node.key); setEditingKey(true); } }}>{displayKey}</span>}
-        </span>
-        <span className="rjv-colon">:</span>
-        <span className="rjv-value-wrap">
-          {!expandable ? (editingValue ? <input ref={valueRef} className={`rjv-inline-input value-${node.type}`} value={editValue} onChange={e => setEditValue(e.target.value)} onBlur={saveValue} onKeyDown={e => { if (e.key === 'Enter') saveValue(); if (e.key === 'Escape') setEditingValue(false); }} /> :
-            <span className={`rjv-value value-${node.type} ${editable ? 'editable' : ''}`} onDoubleClick={() => { if (editable) { setEditValue(String(node.value ?? 'null')); setEditingValue(true); } }}>{formatted}</span>) :
-            <span className={`rjv-summary value-${node.type}`}>{summary}</span>}
-        </span>
+        <span className={`rjv-node-content ${highlighted ? 'highlighted' : ''}`}>
+          {expandable && <button type="button" className="rjv-chevron" onClick={(e) => { e.stopPropagation(); toggle(); }} disabled={!expandable} aria-label={expanded ? 'Collapse node' : 'Expand node'}>
+            {expandable ? (expanded ? <ChevronDownIcon /> : <ChevronRightIcon />) : null}
+          </button>}
+          <span className={`rjv-key ${editable && node.parentType !== 'array' ? 'editable' : ''}`}>
+            {editingKey ? <input ref={keyRef} className="rjv-inline-input key" value={editKey} onChange={e => setEditKey(e.target.value)} onBlur={saveKey} onKeyDown={e => { if (e.key === 'Enter') saveKey(); if (e.key === 'Escape') setEditingKey(false); }} /> :
+              <span onDoubleClick={() => { if (editable && node.parentType !== 'array') { setEditKey(node.key); setEditingKey(true); } }}>{displayKey}</span>}
+          </span>
+          <span className="rjv-colon">:</span>
+          <span className="rjv-value-wrap">
+            {!expandable ? (editingValue ? <input ref={valueRef} className={`rjv-inline-input value-${node.type}`} value={editValue} onChange={e => setEditValue(e.target.value)} onBlur={saveValue} onKeyDown={e => { if (e.key === 'Enter') saveValue(); if (e.key === 'Escape') setEditingValue(false); }} /> :
+              <span className={`rjv-value value-${node.type} ${editable ? 'editable' : ''}`} onDoubleClick={() => { if (editable) { setEditValue(String(node.value ?? 'null')); setEditingValue(true); } }}>{formatted}</span>) :
+              <span className={`rjv-summary value-${node.type}`}>{summary}</span>}
+          </span>
 
-      </span>
-      <Ribbon node={node} items={ribbonActions} defaultGroups={defaultRibbonGroups} className="rjv-node-ribbon" />
+        </span>
+        <Ribbon node={node} items={ribbonActions} defaultGroups={defaultRibbonGroups} className="rjv-node-ribbon" />
       </span>
     </div>
     {expandable && expanded && <div className="rjv-children">
@@ -119,7 +119,7 @@ export default function JsonNode(props: Props) {
         <span className="rjv-chevron" />
         {node.type === 'object' && <><input className="rjv-inline-input key" placeholder="Key" value={newKey} onChange={e => setNewKey(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') add(); if (e.key === 'Escape') setAdding(false); }} /><span className="rjv-colon">:</span></>}
         <input className="rjv-inline-input" placeholder="Value" value={newValue} onChange={e => setNewValue(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') add(); if (e.key === 'Escape') setAdding(false); }} />
-        <button onClick={add} title="Add"><CheckIcon /></button><button onClick={() => setAdding(false)} title="Cancel"><CancelIcon /></button>
+        <button type="button" onClick={add} title="Add"><CheckIcon /></button><button type="button" onClick={() => setAdding(false)} title="Cancel"><CancelIcon /></button>
       </div>}
     </div>}
   </div>;
