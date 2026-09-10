@@ -24,6 +24,10 @@ The project is an independent React adaptation inspired by Better Stack's JSON U
 - Header and footer can be hidden independently
 - TypeScript-first public API
 
+## Live demo
+
+https://huguesbert17.github.io/react-json-workbench/
+
 ## Installation
 
 ```bash
@@ -43,7 +47,10 @@ The text editor uses a deliberately small CodeMirror 6 surface rather than the u
 
 ```tsx
 import { useState } from "react";
-import { JsonViewer, type JsonValue } from "@huguesbert17/react-json-viewer-editor";
+import {
+  JsonViewer,
+  type JsonValue,
+} from "@huguesbert17/react-json-viewer-editor";
 
 export function Example() {
   const [data, setData] = useState<JsonValue>({
@@ -130,8 +137,7 @@ import { Copy, ExternalLink, Search } from "lucide-react";
           id: "copy-custom",
           label: "Copy raw value",
           icon: <Copy size={16} />,
-          onClick: (node) =>
-            navigator.clipboard.writeText(String(node.value)),
+          onClick: (node) => navigator.clipboard.writeText(String(node.value)),
         },
       ],
     },
@@ -165,28 +171,28 @@ Both areas are independently optional:
 
 ## Props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `data` | `JsonValue` | required | JSON value to render |
-| `onChange` | `(data) => void` | — | Called after committed data changes |
-| `editable` | `boolean` | `true` | Enables editing controls |
-| `theme` | `'light' \| 'dark'` | `'light'` | Viewer theme |
-| `defaultMode` | `'tree' \| 'text'` | `'tree'` | Initial view mode |
-| `showLineNumbers` | `boolean` | `false` | Shows line numbers in text mode and the CodeMirror editor |
-| `maxDepth` | `number` | `3` | Initial tree expansion depth |
-| `hideActionText` | `boolean` | `false` | Hides text labels on actions that provide one, including Format |
-| `hideHeader` | `boolean` | `false` | Hides the complete toolbar/header |
-| `hideFooter` | `boolean` | `false` | Hides mode, size, and node statistics |
-| `hideModeSwitcher` | `boolean` | `false` | Hides tree/text controls |
-| `hideTreeControls` | `boolean` | `false` | Hides expand/collapse-all control |
-| `hideEditControls` | `boolean` | `false` | Hides edit/save/cancel controls |
-| `hideSearchButton` | `boolean` | `false` | Hides search |
-| `hideCopyButton` | `boolean` | `false` | Hides copy |
-| `hideDownloadButton` | `boolean` | `false` | Hides download |
-| `hideThemeButton` | `boolean` | `false` | Hides the theme toggle |
-| `hideFormatButton` | `boolean` | `false` | Hides the Text-view Format action |
-| `ribbonActions` | `JsonRibbonItem[]` | `[]` | Standalone and/or grouped custom node actions |
-| `showDefaultRibbonActions` | `boolean` | `true` | Shows built-in grouped copy actions and Tree edit actions |
+| Prop                       | Type                | Default   | Description                                                     |
+| -------------------------- | ------------------- | --------- | --------------------------------------------------------------- |
+| `data`                     | `JsonValue`         | required  | JSON value to render                                            |
+| `onChange`                 | `(data) => void`    | —         | Called after committed data changes                             |
+| `editable`                 | `boolean`           | `true`    | Enables editing controls                                        |
+| `theme`                    | `'light' \| 'dark'` | `'light'` | Viewer theme                                                    |
+| `defaultMode`              | `'tree' \| 'text'`  | `'tree'`  | Initial view mode                                               |
+| `showLineNumbers`          | `boolean`           | `false`   | Shows line numbers in text mode and the CodeMirror editor       |
+| `maxDepth`                 | `number`            | `3`       | Initial tree expansion depth                                    |
+| `hideActionText`           | `boolean`           | `false`   | Hides text labels on actions that provide one, including Format |
+| `hideHeader`               | `boolean`           | `false`   | Hides the complete toolbar/header                               |
+| `hideFooter`               | `boolean`           | `false`   | Hides mode, size, and node statistics                           |
+| `hideModeSwitcher`         | `boolean`           | `false`   | Hides tree/text controls                                        |
+| `hideTreeControls`         | `boolean`           | `false`   | Hides expand/collapse-all control                               |
+| `hideEditControls`         | `boolean`           | `false`   | Hides edit/save/cancel controls                                 |
+| `hideSearchButton`         | `boolean`           | `false`   | Hides search                                                    |
+| `hideCopyButton`           | `boolean`           | `false`   | Hides copy                                                      |
+| `hideDownloadButton`       | `boolean`           | `false`   | Hides download                                                  |
+| `hideThemeButton`          | `boolean`           | `false`   | Hides the theme toggle                                          |
+| `hideFormatButton`         | `boolean`           | `false`   | Hides the Text-view Format action                               |
+| `ribbonActions`            | `JsonRibbonItem[]`  | `[]`      | Standalone and/or grouped custom node actions                   |
+| `showDefaultRibbonActions` | `boolean`           | `true`    | Shows built-in grouped copy actions and Tree edit actions       |
 
 Additional callbacks include `onNodeClick`, `onNodeExpand`, `onNodeCollapse`, `onKeyChange`, `onEditStart`, `onEditSave`, `onEditCancel`, and `onThemeChange`.
 
