@@ -20,8 +20,10 @@
   "main": "index.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc --noEmit"
+    "build": "npm run build:lib",
+    "build:lib": "vite build",
+    "build:demo": "vite build --mode demo",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.0.0",
