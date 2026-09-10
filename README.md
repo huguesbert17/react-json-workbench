@@ -35,7 +35,6 @@ Import the component and its stylesheet:
 
 ```tsx
 import { JsonWorkbench, type JsonValue } from "react-json-workbench";
-import "react-json-workbench/style.css";
 ```
 
 > The scoped package name is the current npm release name. The project and public component are both named **React JSON Workbench** / `JsonWorkbench`.
@@ -45,7 +44,6 @@ import "react-json-workbench/style.css";
 ```tsx
 import { useState } from "react";
 import { JsonWorkbench, type JsonValue } from "react-json-workbench";
-import "react-json-workbench/style.css";
 
 export function Example() {
   const [data, setData] = useState<JsonValue>({
@@ -247,7 +245,6 @@ The package ships compiled ESM, CommonJS, TypeScript declarations, and CSS from 
 
 ```tsx
 import { JsonWorkbench } from "react-json-workbench";
-import "react-json-workbench/style.css";
 ```
 
 React and React DOM are peer dependencies. CodeMirror is kept as a focused runtime dependency and its modules are left external in the library build so consuming bundlers can deduplicate them normally.
