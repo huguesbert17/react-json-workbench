@@ -1,6 +1,6 @@
 {
   "name": "react-json-workbench",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": false,
   "description": "A lightweight, extensible JSON viewer and editor for React with tree inspection, CodeMirror editing, contextual actions, formatting, and theming.",
   "keywords": [

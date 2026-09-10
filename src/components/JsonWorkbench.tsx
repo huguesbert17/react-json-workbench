@@ -127,6 +127,7 @@ export default function JsonWorkbench({
   onEditSave,
   onEditCancel,
   onThemeChange,
+  placeholder,
 }: JsonWorkbenchProps) {
   const [currentData, setCurrentData] = useState<JsonValue>(() => cloneJson(data));
   const [mode, setMode] = useState<'tree' | 'text'>(defaultMode);
@@ -336,6 +337,7 @@ export default function JsonWorkbench({
             onChange={validateText}
             theme={theme}
             showLineNumbers={showLineNumbers}
+            placeholder={placeholder ?? 'Paste or type JSON here...'}
           />
         </div> :
           <div className="rjv-code-wrap">

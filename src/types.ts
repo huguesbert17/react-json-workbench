@@ -1,9 +1,17 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 export type JsonPrimitive = string | number | boolean | null;
 export type JsonValue = JsonPrimitive | JsonObject | JsonValue[];
-export interface JsonObject { [key: string]: JsonValue }
-export type JsonNodeKind = 'string' | 'number' | 'boolean' | 'object' | 'array' | 'null';
+export interface JsonObject {
+  [key: string]: JsonValue;
+}
+export type JsonNodeKind =
+  | "string"
+  | "number"
+  | "boolean"
+  | "object"
+  | "array"
+  | "null";
 export interface JsonNodeType {
   key: string;
   value: JsonValue;
@@ -12,9 +20,13 @@ export interface JsonNodeType {
   level: number;
   expanded?: boolean;
   children?: JsonNodeType[];
-  parentType?: 'object' | 'array' | null;
+  parentType?: "object" | "array" | null;
 }
-export interface KeyChangeEvent { node: JsonNodeType; oldKey: string; newKey: string }
+export interface KeyChangeEvent {
+  node: JsonNodeType;
+  oldKey: string;
+  newKey: string;
+}
 
 export interface JsonRibbonAction {
   /** Stable action id used as the React key. */
@@ -30,7 +42,6 @@ export interface JsonRibbonAction {
   /** Optional styling hook, e.g. `danger`. */
   className?: string;
 }
-
 
 export interface JsonRibbonActionGroup {
   /** Stable id for the group container. */
@@ -49,8 +60,9 @@ export interface JsonWorkbenchProps {
   data: JsonValue;
   onChange?: (data: JsonValue) => void;
   editable?: boolean;
-  theme?: 'light' | 'dark';
-  defaultMode?: 'tree' | 'text';
+  placeholder?: string;
+  theme?: "light" | "dark";
+  defaultMode?: "tree" | "text";
   showLineNumbers?: boolean;
   maxDepth?: number;
   hideActionText?: boolean;
@@ -75,7 +87,7 @@ export interface JsonWorkbenchProps {
   onEditStart?: () => void;
   onEditSave?: (data: JsonValue) => void;
   onEditCancel?: () => void;
-  onThemeChange?: (theme: 'light' | 'dark') => void;
+  onThemeChange?: (theme: "light" | "dark") => void;
 }
 
 /** @deprecated Use JsonWorkbenchProps instead. */

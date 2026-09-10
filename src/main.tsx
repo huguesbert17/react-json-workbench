@@ -247,7 +247,7 @@ function Demo() {
           </div>
 
           <div className={`preview-card ${config.theme === 'dark' ? 'dark-canvas' : ''}`}>
-            <JsonWorkbench
+            <JsonWorkbench placeholder="Test the editor"
               key={config.defaultMode}
               data={data}
               onChange={setData}

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { EditorView, keymap, lineNumbers } from '@codemirror/view';
+import { EditorView, keymap, lineNumbers, placeholder } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { bracketMatching, HighlightStyle, indentOnInput, syntaxHighlighting } from '@codemirror/language';
@@ -12,6 +12,7 @@ interface CodeMirrorJsonEditorProps {
   theme: 'light' | 'dark';
   showLineNumbers?: boolean;
   ariaLabel?: string;
+  placeholder?: string;
 }
 
 const jsonHighlightStyle = HighlightStyle.define([
@@ -78,6 +79,7 @@ export default function CodeMirrorJsonEditor({
   theme,
   showLineNumbers = false,
   ariaLabel = 'Edit JSON',
+  ...props
 }: CodeMirrorJsonEditorProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
@@ -96,6 +98,7 @@ export default function CodeMirrorJsonEditor({
       closeBrackets(),
       bracketMatching(),
       indentOnInput(),
+      placeholder(props.placeholder ?? 'Paste or type JSON here...'),
       syntaxHighlighting(jsonHighlightStyle),
       editorTheme,
       keymap.of([
@@ -132,7 +135,7 @@ export default function CodeMirrorJsonEditor({
     };
     // Theme and gutter configuration are structural; rebuilding for those
     // infrequent changes keeps the integration small and predictable.
-  }, [theme, showLineNumbers, ariaLabel]);
+  }, [theme, showLineNumbers, ariaLabel, props.placeholder]);
 
   useEffect(() => {
     const view = viewRef.current;
