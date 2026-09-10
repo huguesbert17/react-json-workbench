@@ -1,5 +1,5 @@
 {
-  "name": "@huguesbert17/react-json-workbench",
+  "name": "react-json-workbench",
   "version": "0.1.0",
   "private": false,
   "description": "A lightweight JSON viewer and editor for React + TypeScript with tree/text views, extensible action ribbons, and a focused CodeMirror 6 JSON editor.",
