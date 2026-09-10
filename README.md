@@ -31,7 +31,7 @@ https://huguesbert17.github.io/react-json-workbench/
 ## Installation
 
 ```bash
-npm install @huguesbert17/react-json-viewer-editor
+npm install @huguesbert17/react-json-workbench
 ```
 
 For local development:
@@ -47,10 +47,7 @@ The text editor uses a deliberately small CodeMirror 6 surface rather than the u
 
 ```tsx
 import { useState } from "react";
-import {
-  JsonViewer,
-  type JsonValue,
-} from "@huguesbert17/react-json-viewer-editor";
+import { JsonViewer, type JsonValue } from "@huguesbert17/react-json-workbench";
 
 export function Example() {
   const [data, setData] = useState<JsonValue>({
