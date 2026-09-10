@@ -59,6 +59,7 @@ export function Example() {
     <JsonWorkbench
       data={data}
       onChange={setData}
+      placeholder="Type your text to the editor"
       editable
       theme="dark"
       defaultMode="tree"
@@ -202,6 +203,7 @@ Both can be disabled independently:
 | `hideFormatButton`         | `boolean`                   | `false`   | Hides Text-view Format action                 |
 | `ribbonActions`            | `JsonRibbonItem[]`          | `[]`      | Custom standalone and/or grouped node actions |
 | `showDefaultRibbonActions` | `boolean`                   | `true`    | Shows built-in grouped ribbon actions         |
+| `placeholder`              | `string`                    | `false`   | Text to display when empy                     |
 
 Additional callbacks are available for node clicks, expansion/collapse, key changes, edit lifecycle, and theme changes:
 
