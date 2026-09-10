@@ -26,7 +26,7 @@ const jsonHighlightStyle = HighlightStyle.define([
 const editorTheme = EditorView.theme({
   '&': {
     height: '100%',
-    minHeight: '360px',
+    minHeight: 'var(--var-viewer-min-height)',
     backgroundColor: 'var(--bg)',
     color: 'var(--text)',
     fontSize: '12.5px',
@@ -35,7 +35,7 @@ const editorTheme = EditorView.theme({
     outline: 'none',
   },
   '.cm-scroller': {
-    minHeight: '360px',
+    minHeight: 'var(--var-viewer-min-height)',
     overflow: 'auto',
     fontFamily: '"SFMono-Regular", Consolas, "Liberation Mono", monospace',
     lineHeight: '1.65',
