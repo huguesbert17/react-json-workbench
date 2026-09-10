@@ -1,1 +1,1 @@
-{"root":["./src/global.d.ts","./src/index.ts","./src/main.tsx","./src/types.ts","./src/utils.ts","./src/components/codemirrorjsoneditor.tsx","./src/components/jsonnode.tsx","./src/components/jsonviewer.tsx","./src/components/ribbon.tsx","./src/components/icons.tsx"],"version":"5.9.3"}
+{"root":["./src/global.d.ts","./src/index.ts","./src/main.tsx","./src/types.ts","./src/utils.ts","./src/components/codemirrorjsoneditor.tsx","./src/components/jsonnode.tsx","./src/components/reactjsonworkbench.tsx","./src/components/ribbon.tsx","./src/components/icons.tsx"],"version":"5.9.3"}
