@@ -56,12 +56,15 @@ export interface JsonRibbonActionGroup {
 
 export type JsonRibbonItem = JsonRibbonAction | JsonRibbonActionGroup;
 
+export type ThemeMode = "light" | "dark" | "system";
+export type ResolvedTheme = "light" | "dark";
+
 export interface JsonWorkbenchProps {
   data: JsonValue;
   onChange?: (data: JsonValue) => void;
   editable?: boolean;
   placeholder?: string;
-  theme?: "light" | "dark";
+  theme?: ThemeMode;
   defaultMode?: "tree" | "text";
   showLineNumbers?: boolean;
   maxDepth?: number;

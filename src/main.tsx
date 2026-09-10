@@ -36,7 +36,7 @@ const INITIAL_DATA: JsonValue = {
 };
 
 type DemoConfig = {
-  theme: 'light' | 'dark';
+  theme: 'light' | 'dark' | 'system';
   defaultMode: 'tree' | 'text';
   editable: boolean;
   showLineNumbers: boolean;
@@ -57,7 +57,7 @@ type DemoConfig = {
 };
 
 const DEFAULT_CONFIG: DemoConfig = {
-  theme: 'light',
+  theme: 'system',
   defaultMode: 'tree',
   editable: true,
   showLineNumbers: true,
@@ -182,6 +182,7 @@ function Demo() {
             <div className="segmented" aria-label="Theme">
               <button className={config.theme === 'light' ? 'active' : ''} onClick={() => patch('theme', 'light')}>Light</button>
               <button className={config.theme === 'dark' ? 'active' : ''} onClick={() => patch('theme', 'dark')}>Dark</button>
+              <button className={config.theme === 'system' ? 'active' : ''} onClick={() => patch('theme', 'system')}>System</button>
             </div>
             <div style={{ height: 9 }} />
             <div className="segmented" aria-label="Initial mode">

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
-import type { JsonNodeType, JsonRibbonActionGroup, JsonValue, JsonWorkbenchProps, KeyChangeEvent } from '../types';
+import type { JsonNodeType, JsonRibbonActionGroup, JsonValue, JsonWorkbenchProps, KeyChangeEvent, ResolvedTheme, ThemeMode } from '../types';
 import { addAtPath, buildNodes, cloneJson, countNodes, deleteAtPath, formatJsonPath, formatNodeValueForCopy, renameAtPath, setAtPath } from '../utils';
 import JsonNode from './JsonNode';
 import CodeMirrorJsonEditor from './CodeMirrorJsonEditor';
@@ -102,7 +102,7 @@ export default function JsonWorkbench({
   data,
   onChange,
   editable = true,
-  theme = 'light',
+  theme = 'system',
   defaultMode = 'tree',
   showLineNumbers = false,
   maxDepth = 3,
@@ -141,6 +141,51 @@ export default function JsonWorkbench({
   const [allExpanded, setAllExpanded] = useState(false);
   const [hoveredTextLine, setHoveredTextLine] = useState<number | null>(null);
   const [hoveredTextRibbonLeft, setHoveredTextRibbonLeft] = useState(8);
+
+  const getSystemTheme = (): ResolvedTheme => {
+    if (typeof window === "undefined") return "light";
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  };
+
+  const [themeMode, setThemeMode] = useState<ThemeMode>(theme);
+
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => theme === "system" ? getSystemTheme() : theme);
+
+  useEffect(() => {
+    setThemeMode(theme);
+
+    setResolvedTheme(theme === "system" ? getSystemTheme() : theme);
+  }, [theme]);
+
+  useEffect(() => {
+    if (themeMode !== "system") return;
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setResolvedTheme(event.matches ? "dark" : "light");
+    };
+
+    setResolvedTheme(media.matches ? "dark" : "light");
+
+    media.addEventListener("change", handleChange);
+
+    return () => {
+      media.removeEventListener("change", handleChange);
+    };
+  }, [themeMode]);
+
+  const toggleTheme = () => {
+    const nextTheme: ResolvedTheme =
+      resolvedTheme === "dark" ? "light" : "dark";
+
+    // User explicitly selected a theme, so stop following system.
+    setThemeMode(nextTheme);
+    setResolvedTheme(nextTheme);
+
+    onThemeChange?.(nextTheme);
+  };
 
   useEffect(() => {
     if (!editMode) {
@@ -290,7 +335,7 @@ export default function JsonWorkbench({
     ],
   }] : [];
 
-  return <div className={`react-json-viewer theme-${theme}`}>
+  return <div className={`react-json-viewer theme-${resolvedTheme}`}>
     {!hideHeader && <div className="rjv-toolbar">
       <div className="rjv-brand"><JsonIcon /><span>JSON</span></div>
 
@@ -316,7 +361,11 @@ export default function JsonWorkbench({
         {!hideSearchButton && <button type="button" onClick={() => setSearchOpen(v => !v)} title="Search JSON"><SearchIcon /></button>}
         {!hideDownloadButton && <button type="button" onClick={download} title="Download JSON"><DownloadIcon /></button>}
         {!hideCopyButton && <button type="button" onClick={copy} title="Copy JSON"><CopyIcon /></button>}
-        {!hideThemeButton && <button type="button" onClick={() => onThemeChange?.(theme === 'light' ? 'dark' : 'light')} title="Toggle theme">{theme === 'light' ? <MoonIcon /> : <SunIcon />}</button>}
+        {!hideThemeButton && (
+          <button type="button" onClick={toggleTheme} title={`Switch to ${resolvedTheme === "light" ? "dark" : "light"} theme`} aria-label={`Switch to ${resolvedTheme === "light" ? "dark" : "light"} theme`}>
+            {resolvedTheme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+        )}
       </div>
     </div>}
 
@@ -335,7 +384,7 @@ export default function JsonWorkbench({
           <CodeMirrorJsonEditor
             value={jsonText}
             onChange={validateText}
-            theme={theme}
+            theme={resolvedTheme}
             showLineNumbers={showLineNumbers}
             placeholder={placeholder ?? 'Paste or type JSON here...'}
           />
