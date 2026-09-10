@@ -1,4 +1,4 @@
-# React JSON Viewer Editor
+# React JSON Workbench
 
 A lightweight JSON viewer and editor for React + TypeScript with tree and text views, inline tree editing, syntax highlighting, grouped hover actions, and a focused CodeMirror 6 integration for text editing.
 
@@ -27,7 +27,7 @@ The project is an independent React adaptation inspired by Better Stack's JSON U
 ## Installation
 
 ```bash
-npm install @huguesbert17/react-json-viewer-editor
+npm install @huguesbert17/react-json-workbench
 ```
 
 For local development:
@@ -43,7 +43,10 @@ The text editor uses a deliberately small CodeMirror 6 surface rather than the u
 
 ```tsx
 import { useState } from "react";
-import { JsonViewer, type JsonValue } from "@huguesbert17/react-json-viewer-editor";
+import {
+  ReactJsonWorkbench,
+  type JsonValue,
+} from "@huguesbert17/react-json-workbench";
 
 export function Example() {
   const [data, setData] = useState<JsonValue>({
@@ -53,7 +56,7 @@ export function Example() {
   });
 
   return (
-    <JsonViewer
+    <ReactJsonWorkbench
       data={data}
       onChange={setData}
       theme="dark"
@@ -79,7 +82,7 @@ Text view includes a **Format** button in the header. In edit mode it parses the
 Hide the control with:
 
 ```tsx
-<JsonViewer data={data} hideFormatButton />
+<ReactJsonWorkbench data={data} hideFormatButton />
 ```
 
 ## Ribbon actions
@@ -91,7 +94,7 @@ Ribbons support both standalone actions and explicit groups. Existing standalone
 ```tsx
 import { Search } from "lucide-react";
 
-<JsonViewer
+<ReactJsonWorkbench
   data={data}
   ribbonActions={[
     {
@@ -113,7 +116,7 @@ Use `JsonRibbonActionGroup` when actions should be visually separated into their
 ```tsx
 import { Copy, ExternalLink, Search } from "lucide-react";
 
-<JsonViewer
+<ReactJsonWorkbench
   data={data}
   ribbonActions={[
     {
@@ -130,8 +133,7 @@ import { Copy, ExternalLink, Search } from "lucide-react";
           id: "copy-custom",
           label: "Copy raw value",
           icon: <Copy size={16} />,
-          onClick: (node) =>
-            navigator.clipboard.writeText(String(node.value)),
+          onClick: (node) => navigator.clipboard.writeText(String(node.value)),
         },
       ],
     },
@@ -150,7 +152,7 @@ import { Copy, ExternalLink, Search } from "lucide-react";
 With `showDefaultRibbonActions` enabled, the built-in **Copy value** and **Copy JSON path** actions are grouped together. During Tree editing, **Add item** and **Delete row** are rendered as a separate edit group.
 
 ```tsx
-<JsonViewer data={data} showDefaultRibbonActions />
+<ReactJsonWorkbench data={data} showDefaultRibbonActions />
 ```
 
 Set `showDefaultRibbonActions={false}` when the ribbon should contain only custom actions.
@@ -160,33 +162,33 @@ Set `showDefaultRibbonActions={false}` when the ribbon should contain only custo
 Both areas are independently optional:
 
 ```tsx
-<JsonViewer data={data} hideHeader hideFooter />
+<ReactJsonWorkbench data={data} hideHeader hideFooter />
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `data` | `JsonValue` | required | JSON value to render |
-| `onChange` | `(data) => void` | — | Called after committed data changes |
-| `editable` | `boolean` | `true` | Enables editing controls |
-| `theme` | `'light' \| 'dark'` | `'light'` | Viewer theme |
-| `defaultMode` | `'tree' \| 'text'` | `'tree'` | Initial view mode |
-| `showLineNumbers` | `boolean` | `false` | Shows line numbers in text mode and the CodeMirror editor |
-| `maxDepth` | `number` | `3` | Initial tree expansion depth |
-| `hideActionText` | `boolean` | `false` | Hides text labels on actions that provide one, including Format |
-| `hideHeader` | `boolean` | `false` | Hides the complete toolbar/header |
-| `hideFooter` | `boolean` | `false` | Hides mode, size, and node statistics |
-| `hideModeSwitcher` | `boolean` | `false` | Hides tree/text controls |
-| `hideTreeControls` | `boolean` | `false` | Hides expand/collapse-all control |
-| `hideEditControls` | `boolean` | `false` | Hides edit/save/cancel controls |
-| `hideSearchButton` | `boolean` | `false` | Hides search |
-| `hideCopyButton` | `boolean` | `false` | Hides copy |
-| `hideDownloadButton` | `boolean` | `false` | Hides download |
-| `hideThemeButton` | `boolean` | `false` | Hides the theme toggle |
-| `hideFormatButton` | `boolean` | `false` | Hides the Text-view Format action |
-| `ribbonActions` | `JsonRibbonItem[]` | `[]` | Standalone and/or grouped custom node actions |
-| `showDefaultRibbonActions` | `boolean` | `true` | Shows built-in grouped copy actions and Tree edit actions |
+| Prop                       | Type                | Default   | Description                                                     |
+| -------------------------- | ------------------- | --------- | --------------------------------------------------------------- |
+| `data`                     | `JsonValue`         | required  | JSON value to render                                            |
+| `onChange`                 | `(data) => void`    | —         | Called after committed data changes                             |
+| `editable`                 | `boolean`           | `true`    | Enables editing controls                                        |
+| `theme`                    | `'light' \| 'dark'` | `'light'` | Viewer theme                                                    |
+| `defaultMode`              | `'tree' \| 'text'`  | `'tree'`  | Initial view mode                                               |
+| `showLineNumbers`          | `boolean`           | `false`   | Shows line numbers in text mode and the CodeMirror editor       |
+| `maxDepth`                 | `number`            | `3`       | Initial tree expansion depth                                    |
+| `hideActionText`           | `boolean`           | `false`   | Hides text labels on actions that provide one, including Format |
+| `hideHeader`               | `boolean`           | `false`   | Hides the complete toolbar/header                               |
+| `hideFooter`               | `boolean`           | `false`   | Hides mode, size, and node statistics                           |
+| `hideModeSwitcher`         | `boolean`           | `false`   | Hides tree/text controls                                        |
+| `hideTreeControls`         | `boolean`           | `false`   | Hides expand/collapse-all control                               |
+| `hideEditControls`         | `boolean`           | `false`   | Hides edit/save/cancel controls                                 |
+| `hideSearchButton`         | `boolean`           | `false`   | Hides search                                                    |
+| `hideCopyButton`           | `boolean`           | `false`   | Hides copy                                                      |
+| `hideDownloadButton`       | `boolean`           | `false`   | Hides download                                                  |
+| `hideThemeButton`          | `boolean`           | `false`   | Hides the theme toggle                                          |
+| `hideFormatButton`         | `boolean`           | `false`   | Hides the Text-view Format action                               |
+| `ribbonActions`            | `JsonRibbonItem[]`  | `[]`      | Standalone and/or grouped custom node actions                   |
+| `showDefaultRibbonActions` | `boolean`           | `true`    | Shows built-in grouped copy actions and Tree edit actions       |
 
 Additional callbacks include `onNodeClick`, `onNodeExpand`, `onNodeCollapse`, `onKeyChange`, `onEditStart`, `onEditSave`, `onEditCancel`, and `onThemeChange`.
 

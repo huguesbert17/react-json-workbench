@@ -99,7 +99,7 @@ function expandNodes(nodes: JsonNodeType[], expanded: boolean): JsonNodeType[] {
   return nodes.map(n => ({ ...n, expanded: (n.type === 'object' || n.type === 'array') ? expanded : n.expanded, children: n.children ? expandNodes(n.children, expanded) : undefined }));
 }
 
-export default function JsonViewer({
+export default function ReactJsonWorkbench({
   data,
   onChange,
   editable = true,
