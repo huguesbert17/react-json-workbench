@@ -1,39 +1,40 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { libInjectCss } from "vite-plugin-lib-inject-css";
 
 const external = [
-  'react',
-  'react-dom',
-  'react/jsx-runtime',
-  '@codemirror/autocomplete',
-  '@codemirror/commands',
-  '@codemirror/lang-json',
-  '@codemirror/language',
-  '@codemirror/view',
-  '@lezer/highlight',
+  "react",
+  "react-dom",
+  "react/jsx-runtime",
+  "@codemirror/autocomplete",
+  "@codemirror/commands",
+  "@codemirror/lang-json",
+  "@codemirror/language",
+  "@codemirror/view",
+  "@lezer/highlight",
 ];
 
 export default defineConfig(({ mode }) => {
-  if (mode === 'demo') {
+  if (mode === "demo") {
     return {
       plugins: [react()],
-      base: '/react-json-workbench/',
+      base: "/react-json-workbench/",
       build: {
-        outDir: 'demo-dist',
+        outDir: "demo-dist",
       },
     };
   }
 
   return {
-    plugins: [react()],
+    plugins: [react(), libInjectCss()],
     build: {
-      outDir: 'dist',
+      outDir: "dist",
       emptyOutDir: true,
       lib: {
-        entry: 'src/index.ts',
-        formats: ['es', 'cjs'],
-        fileName: format => (format === 'es' ? 'index.js' : 'index.cjs'),
-        cssFileName: 'style',
+        entry: "src/index.ts",
+        formats: ["es", "cjs"],
+        fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
+        cssFileName: "style",
       },
       rollupOptions: {
         external,
