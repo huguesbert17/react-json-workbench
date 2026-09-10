@@ -2,7 +2,7 @@
 
 A lightweight, dependency-free JSON viewer and editor for React + TypeScript. It provides tree and text views, syntax highlighting, inline editing, search, copy/download actions, light and dark themes, and extensible hover ribbons for node-level actions.
 
-This project is an independent React adaptation inspired by Jeevan Lal's MIT-licensed `vue3-json-viewer`.
+This project is an independent React adaptation inspired by Better Stack UI and Jeevan Lal's MIT-licensed `vue3-json-viewer`.
 
 ## Features
 
@@ -35,14 +35,14 @@ npm run dev
 ## Basic usage
 
 ```tsx
-import { useState } from 'react';
-import { JsonViewer, type JsonValue } from './src';
+import { useState } from "react";
+import { JsonViewer, type JsonValue } from "./src";
 
 export function Example() {
   const [data, setData] = useState<JsonValue>({
-    name: 'Ada',
+    name: "Ada",
     active: true,
-    profile: { role: 'engineer' },
+    profile: { role: "engineer" },
   });
 
   return (
@@ -62,27 +62,27 @@ export function Example() {
 The same custom ribbon API is available in tree view and read-only text view. Any React node can be used as the icon.
 
 ```tsx
-import { ExternalLink, Search } from 'lucide-react';
+import { ExternalLink, Search } from "lucide-react";
 
 <JsonViewer
   data={data}
   ribbonActions={[
     {
-      id: 'inspect',
-      label: 'Inspect value',
+      id: "inspect",
+      label: "Inspect value",
       icon: <Search size={16} />,
       onClick: (node) => console.log(node.path, node.value),
     },
     {
-      id: 'open',
-      label: 'Open URL',
+      id: "open",
+      label: "Open URL",
       icon: <ExternalLink size={16} />,
       visible: (node) =>
-        node.type === 'string' && /^https?:\/\//.test(String(node.value)),
-      onClick: (node) => window.open(String(node.value), '_blank'),
+        node.type === "string" && /^https?:\/\//.test(String(node.value)),
+      onClick: (node) => window.open(String(node.value), "_blank"),
     },
   ]}
-/>
+/>;
 ```
 
 The ribbon is available even when `ribbonActions` is omitted. With `showDefaultRibbonActions` enabled, the viewer includes built-in **Copy value** and **Copy JSON path** actions. In tree edit mode it also exposes **Add item** for expandable nodes and **Delete row**.
@@ -96,35 +96,31 @@ The ribbon is intentionally hidden while editing in **Text** view so it never in
 Both areas are independently optional:
 
 ```tsx
-<JsonViewer
-  data={data}
-  hideHeader
-  hideFooter
-/>
+<JsonViewer data={data} hideHeader hideFooter />
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `data` | `JsonValue` | required | JSON value to render |
-| `onChange` | `(data) => void` | — | Called after committed data changes |
-| `editable` | `boolean` | `true` | Enables editing controls |
-| `theme` | `'light' \| 'dark'` | `'light'` | Viewer theme |
-| `defaultMode` | `'tree' \| 'text'` | `'tree'` | Initial view mode |
-| `showLineNumbers` | `boolean` | `false` | Shows line numbers in text mode |
-| `maxDepth` | `number` | `3` | Initial tree expansion depth |
-| `hideHeader` | `boolean` | `false` | Hides the complete toolbar/header |
-| `hideFooter` | `boolean` | `false` | Hides mode, size, and node statistics |
-| `hideModeSwitcher` | `boolean` | `false` | Hides tree/text controls |
-| `hideTreeControls` | `boolean` | `false` | Hides expand/collapse-all control |
-| `hideEditControls` | `boolean` | `false` | Hides edit/save/cancel controls |
-| `hideSearchButton` | `boolean` | `false` | Hides search |
-| `hideCopyButton` | `boolean` | `false` | Hides copy |
-| `hideDownloadButton` | `boolean` | `false` | Hides download |
-| `hideThemeButton` | `boolean` | `false` | Hides the theme toggle |
-| `ribbonActions` | `JsonRibbonAction[]` | `[]` | Custom node actions shown on hover |
-| `showDefaultRibbonActions` | `boolean` | `true` | Shows built-in Copy value/Copy JSON path actions and tree edit actions |
+| Prop                       | Type                 | Default   | Description                                                            |
+| -------------------------- | -------------------- | --------- | ---------------------------------------------------------------------- |
+| `data`                     | `JsonValue`          | required  | JSON value to render                                                   |
+| `onChange`                 | `(data) => void`     | —         | Called after committed data changes                                    |
+| `editable`                 | `boolean`            | `true`    | Enables editing controls                                               |
+| `theme`                    | `'light' \| 'dark'`  | `'light'` | Viewer theme                                                           |
+| `defaultMode`              | `'tree' \| 'text'`   | `'tree'`  | Initial view mode                                                      |
+| `showLineNumbers`          | `boolean`            | `false`   | Shows line numbers in text mode                                        |
+| `maxDepth`                 | `number`             | `3`       | Initial tree expansion depth                                           |
+| `hideHeader`               | `boolean`            | `false`   | Hides the complete toolbar/header                                      |
+| `hideFooter`               | `boolean`            | `false`   | Hides mode, size, and node statistics                                  |
+| `hideModeSwitcher`         | `boolean`            | `false`   | Hides tree/text controls                                               |
+| `hideTreeControls`         | `boolean`            | `false`   | Hides expand/collapse-all control                                      |
+| `hideEditControls`         | `boolean`            | `false`   | Hides edit/save/cancel controls                                        |
+| `hideSearchButton`         | `boolean`            | `false`   | Hides search                                                           |
+| `hideCopyButton`           | `boolean`            | `false`   | Hides copy                                                             |
+| `hideDownloadButton`       | `boolean`            | `false`   | Hides download                                                         |
+| `hideThemeButton`          | `boolean`            | `false`   | Hides the theme toggle                                                 |
+| `ribbonActions`            | `JsonRibbonAction[]` | `[]`      | Custom node actions shown on hover                                     |
+| `showDefaultRibbonActions` | `boolean`            | `true`    | Shows built-in Copy value/Copy JSON path actions and tree edit actions |
 
 Additional callbacks include `onNodeClick`, `onNodeExpand`, `onNodeCollapse`, `onKeyChange`, `onEditStart`, `onEditSave`, `onEditCancel`, and `onThemeChange`.
 
