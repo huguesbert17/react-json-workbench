@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
-import type { JsonNodeType, JsonRibbonAction, JsonValue, JsonViewerProps, KeyChangeEvent } from '../types';
+import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
+import type { JsonNodeType, JsonRibbonActionGroup, JsonValue, JsonViewerProps, KeyChangeEvent } from '../types';
 import { addAtPath, buildNodes, cloneJson, countNodes, deleteAtPath, formatJsonPath, formatNodeValueForCopy, renameAtPath, setAtPath } from '../utils';
 import JsonNode from './JsonNode';
-import { TreeIcon, CodeIcon, ExpandIcon, CollapseIcon, EditIcon, SaveIcon, CancelIcon, CopyIcon, DownloadIcon, SearchIcon, MoonIcon, SunIcon, JsonIcon, TrashIcon, CheckIcon, PathIcon } from './icons';
+import CodeMirrorJsonEditor from './CodeMirrorJsonEditor';
+import Ribbon from './Ribbon';
+import { TreeIcon, CodeIcon, ExpandIcon, CollapseIcon, EditIcon, CancelIcon, CopyIcon, DownloadIcon, SearchIcon, MoonIcon, SunIcon, JsonIcon, CheckIcon, PathIcon, FormatIcon } from './icons';
 import '../styles.css';
 
 function formatSize(size: number) {
@@ -93,24 +95,6 @@ function mapJsonLinesToNodes(text: string, data: JsonValue): Array<JsonNodeType 
   return result;
 }
 
-function TextRibbon({ node, actions, editable, showDefault, onDelete }: {
-  node: JsonNodeType; actions: JsonRibbonAction[]; editable: boolean; showDefault: boolean; onDelete: (node: JsonNodeType) => void;
-}) {
-  const visible = actions.filter(action => action.visible?.(node) ?? true);
-  if (!visible.length && !showDefault) return null;
-  return <span className="rjv-text-ribbon" onMouseDown={e => e.preventDefault()} onClick={e => e.stopPropagation()}>
-    {visible.map(action => {
-      const disabled = typeof action.disabled === 'function' ? action.disabled(node) : !!action.disabled;
-      return <button key={action.id} type="button" className={action.className} disabled={disabled} title={action.label} aria-label={action.label} onClick={() => action.onClick(node)}>{action.icon}</button>;
-    })}
-    {showDefault && <>
-      <button type="button" title="Copy value" aria-label="Copy value" onClick={() => { void navigator.clipboard.writeText(formatNodeValueForCopy(node.value)); }}><CopyIcon /></button>
-      <button type="button" title="Copy JSON path" aria-label="Copy JSON path" onClick={() => { void navigator.clipboard.writeText(formatJsonPath(node.path)); }}><PathIcon /></button>
-      {editable && <button type="button" className="danger" title="Delete row" aria-label="Delete row" onClick={() => onDelete(node)}><TrashIcon /></button>}
-    </>}
-  </span>;
-}
-
 function expandNodes(nodes: JsonNodeType[], expanded: boolean): JsonNodeType[] {
   return nodes.map(n => ({ ...n, expanded: (n.type === 'object' || n.type === 'array') ? expanded : n.expanded, children: n.children ? expandNodes(n.children, expanded) : undefined }));
 }
@@ -133,6 +117,7 @@ export default function JsonViewer({
   hideCopyButton = false,
   hideDownloadButton = false,
   hideThemeButton = false,
+  hideFormatButton = false,
   ribbonActions = [],
   showDefaultRibbonActions = true,
   onNodeClick,
@@ -156,9 +141,6 @@ export default function JsonViewer({
   const [allExpanded, setAllExpanded] = useState(false);
   const [hoveredTextLine, setHoveredTextLine] = useState<number | null>(null);
   const [hoveredTextRibbonLeft, setHoveredTextRibbonLeft] = useState(8);
-  const [editorScrollTop, setEditorScrollTop] = useState(0);
-  const editorHighlightRef = useRef<HTMLPreElement>(null);
-  const editorLineNumbersRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!editMode) {
@@ -225,16 +207,6 @@ export default function JsonViewer({
     try { JSON.parse(value); setJsonError(''); } catch (e) { setJsonError(e instanceof Error ? e.message : 'Invalid JSON'); }
   };
 
-  const syncEditorScroll = (target: HTMLTextAreaElement) => {
-    setEditorScrollTop(target.scrollTop);
-    if (editorHighlightRef.current) {
-      editorHighlightRef.current.scrollTop = target.scrollTop;
-      editorHighlightRef.current.scrollLeft = target.scrollLeft;
-    }
-    if (editorLineNumbersRef.current) {
-      editorLineNumbersRef.current.scrollTop = target.scrollTop;
-    }
-  };
 
   const handleValueChange = (node: JsonNodeType, value: JsonValue) => applyDraft(setAtPath(currentData, node.path, value));
   const handleDelete = (node: JsonNodeType) => applyDraft(deleteAtPath(currentData, node.path));
@@ -246,6 +218,19 @@ export default function JsonViewer({
   };
 
   const copy = async () => { await navigator.clipboard.writeText(JSON.stringify(currentData, null, 2)); };
+  const format = () => {
+    if (mode !== 'text') return;
+    try {
+      const source = editMode ? jsonText : JSON.stringify(currentData);
+      const parsed = JSON.parse(source) as JsonValue;
+      const formatted = JSON.stringify(parsed, null, 2);
+      setJsonText(formatted);
+      setJsonError('');
+      if (!editMode) applyDraft(parsed);
+    } catch (e) {
+      setJsonError(e instanceof Error ? e.message : 'Invalid JSON');
+    }
+  };
   const download = () => {
     const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -261,7 +246,6 @@ export default function JsonViewer({
 
   const pretty = JSON.stringify(currentData, null, 2);
   const lines = pretty.split('\n');
-  const editLines = jsonText.split('\n');
   const textRibbonData = useMemo(() => { try { return JSON.parse(jsonText) as JsonValue; } catch { return currentData; } }, [jsonText, currentData]);
   const textLineNodes = useMemo(() => mapJsonLinesToNodes(editMode ? jsonText : pretty, textRibbonData), [editMode, jsonText, pretty, textRibbonData]);
   const jsonSize = new Blob([JSON.stringify(currentData)]).size;
@@ -280,8 +264,7 @@ export default function JsonViewer({
     // Keep the ribbon next to the actual line content instead of pinning it
     // to the far-right edge of the text view. Clamp it to the visible area
     // so long lines cannot push the ribbon off-screen.
-    const source = target instanceof HTMLTextAreaElement ? target.value : pretty;
-    const lineText = source.split('\n')[line] ?? '';
+    const lineText = pretty.split('\n')[line] ?? '';
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     if (context) {
@@ -297,6 +280,15 @@ export default function JsonViewer({
       }
     }
   };
+
+  const textDefaultRibbonGroups: JsonRibbonActionGroup[] = showDefaultRibbonActions ? [{
+    id: 'copy',
+    label: 'Copy',
+    actions: [
+      { id: 'copy-value', label: 'Copy value', icon: <CopyIcon />, onClick: node => { void navigator.clipboard.writeText(formatNodeValueForCopy(node.value)); } },
+      { id: 'copy-path', label: 'Copy JSON path', icon: <PathIcon />, onClick: node => { void navigator.clipboard.writeText(formatJsonPath(node.path)); } },
+    ],
+  }] : [];
 
   return <div className={`react-json-viewer theme-${theme}`}>
     {!hideHeader && <div className="rjv-toolbar">
@@ -320,6 +312,7 @@ export default function JsonViewer({
           </>}
         </div>}
 
+        {!hideFormatButton && mode === 'text' && <button className="rjv-format" onClick={format} title="Format JSON" aria-label="Format JSON"><FormatIcon />{!hideActionText && <span>Format</span>}</button>}
         {!hideSearchButton && <button onClick={() => setSearchOpen(v => !v)} title="Search JSON"><SearchIcon /></button>}
         {!hideDownloadButton && <button onClick={download} title="Download JSON"><DownloadIcon /></button>}
         {!hideCopyButton && <button onClick={copy} title="Copy JSON"><CopyIcon /></button>}
@@ -339,27 +332,18 @@ export default function JsonViewer({
         <JsonNode key={node.path.join('.')} node={node} editable={editMode} searchQuery={searchQuery} ribbonActions={ribbonActions} showDefaultRibbonActions={showDefaultRibbonActions} onNodeClick={onNodeClick} onNodeExpand={onNodeExpand} onNodeCollapse={onNodeCollapse} onValueChange={handleValueChange} onKeyChange={handleKeyChange} onDelete={handleDelete} onAdd={handleAdd} />
       )}</div> : <div className="rjv-text-view" onMouseLeave={() => setHoveredTextLine(null)}>
         {editMode ? <div className={`rjv-editor ${jsonError ? 'error' : ''}`}>
-          {showLineNumbers && <div className="rjv-editor-line-numbers" ref={editorLineNumbersRef}>{editLines.map((_, i) => <span key={i}>{i + 1}</span>)}</div>}
-          <div className="rjv-editor-stage">
-            <pre className="rjv-editor-highlight" ref={editorHighlightRef} aria-hidden="true"><code><HighlightedJson text={jsonText} /></code></pre>
-            <textarea
-              className="rjv-textarea rjv-textarea-overlay"
-              value={jsonText}
-              onChange={e => validateText(e.target.value)}
-              onScroll={e => syncEditorScroll(e.currentTarget)}
-              spellCheck={false}
-              autoCapitalize="off"
-              autoCorrect="off"
-              aria-label="Edit JSON"
-            />
-
-          </div>
+          <CodeMirrorJsonEditor
+            value={jsonText}
+            onChange={validateText}
+            theme={theme}
+            showLineNumbers={showLineNumbers}
+          />
         </div> :
           <div className="rjv-code-wrap">
             {showLineNumbers && <div className="rjv-line-numbers">{lines.map((_, i) => <span key={i}>{i + 1}</span>)}</div>}
             <pre className="rjv-highlighted-json" onMouseMove={handleTextMouseMove}><code><HighlightedJson text={pretty} /></code></pre>
             {hoveredTextLine !== null && textLineNodes[hoveredTextLine] && <span className="rjv-text-ribbon-anchor rjv-text-ribbon-readonly" style={{ top: `calc(14px + ${hoveredTextLine} * 1.65em)`, left: hoveredTextRibbonLeft }}>
-              <TextRibbon node={textLineNodes[hoveredTextLine]!} actions={ribbonActions} editable={false} showDefault={showDefaultRibbonActions} onDelete={handleDelete} />
+              <Ribbon node={textLineNodes[hoveredTextLine]!} items={ribbonActions} defaultGroups={textDefaultRibbonGroups} className="rjv-text-ribbon" />
             </span>}
           </div>}
         {jsonError && <div className="rjv-error">Invalid JSON: {jsonError}</div>}

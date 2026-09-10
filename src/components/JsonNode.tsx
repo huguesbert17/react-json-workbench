@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { JsonNodeType, JsonRibbonAction, JsonValue, KeyChangeEvent } from '../types';
+import type { JsonNodeType, JsonRibbonActionGroup, JsonRibbonItem, JsonValue, KeyChangeEvent } from '../types';
 import { formatJsonPath, formatNodeValueForCopy, matchesNode, parseLooseValue } from '../utils';
 import { ChevronDownIcon, ChevronRightIcon, PlusIcon, TrashIcon, CheckIcon, CancelIcon, CopyIcon, PathIcon } from './icons';
+import Ribbon from './Ribbon';
 
 interface Props {
   node: JsonNodeType;
   editable: boolean;
   searchQuery: string;
-  ribbonActions?: JsonRibbonAction[];
+  ribbonActions?: JsonRibbonItem[];
   showDefaultRibbonActions?: boolean;
   onNodeClick?: (node: JsonNodeType) => void;
   onNodeExpand?: (node: JsonNodeType) => void;
@@ -42,12 +43,6 @@ export default function JsonNode(props: Props) {
     return node.key.toLowerCase().includes(q) || (!expandable && String(node.value).toLowerCase().includes(q));
   }, [searchQuery, node, expandable]);
   const children = useMemo(() => (node.children ?? []).filter(c => matchesNode(c, searchQuery)), [node.children, searchQuery]);
-  const customActions = useMemo(
-    () => ribbonActions.filter(action => action.visible?.(node) ?? true),
-    [ribbonActions, node]
-  );
-  const hasDefaultRibbon = showDefaultRibbonActions;
-  const hasRibbon = customActions.length > 0 || hasDefaultRibbon;
 
   const toggle = () => {
     if (!expandable) return;
@@ -75,9 +70,29 @@ export default function JsonNode(props: Props) {
   const summary = node.type === 'array' ? `Array(${node.children?.length ?? 0})` : `Object{${node.children?.length ?? 0}}`;
   const formatted = node.type === 'string' ? `"${node.value}"` : node.type === 'null' ? 'null' : String(node.value);
 
+  const defaultRibbonGroups: JsonRibbonActionGroup[] = showDefaultRibbonActions ? [
+    {
+      id: 'copy',
+      label: 'Copy',
+      actions: [
+        { id: 'copy-value', label: 'Copy value', icon: <CopyIcon />, onClick: () => { void navigator.clipboard.writeText(formatNodeValueForCopy(node.value)); } },
+        { id: 'copy-path', label: 'Copy JSON path', icon: <PathIcon />, onClick: () => { void navigator.clipboard.writeText(formatJsonPath(node.path)); } },
+      ],
+    },
+    ...(editable ? [{
+      id: 'edit',
+      label: 'Edit',
+      actions: [
+        ...(expandable ? [{ id: 'add-item', label: 'Add item', icon: <PlusIcon />, onClick: () => setAdding(v => !v) }] : []),
+        { id: 'delete-row', label: 'Delete row', icon: <TrashIcon />, className: 'danger', onClick: () => props.onDelete(node) },
+      ],
+    } satisfies JsonRibbonActionGroup] : []),
+  ] : [];
+
   return <div className="rjv-node">
     <div className={`rjv-node-header ${expandable ? 'expandable' : 'leaf'}`} onClick={() => props.onNodeClick?.(node)}>
       <span className="rjv-indent" style={{ width: node.level * 20 }} />
+      <span className="rjv-node-anchor">
       <span className={`rjv-node-content ${highlighted ? 'highlighted' : ''}`}>
         {expandable && <button className="rjv-chevron" onClick={(e) => { e.stopPropagation(); toggle(); }} disabled={!expandable} aria-label={expanded ? 'Collapse node' : 'Expand node'}>
           {expandable ? (expanded ? <ChevronDownIcon /> : <ChevronRightIcon />) : null}
@@ -93,37 +108,8 @@ export default function JsonNode(props: Props) {
             <span className={`rjv-summary value-${node.type}`}>{summary}</span>}
         </span>
 
-
-        {hasRibbon && <span className="rjv-node-ribbon" onClick={e => e.stopPropagation()}>
-          {customActions.map(action => {
-            const disabled = typeof action.disabled === 'function' ? action.disabled(node) : !!action.disabled;
-            return <button
-              key={action.id}
-              type="button"
-              className={action.className}
-              disabled={disabled}
-              title={action.label}
-              aria-label={action.label}
-              onClick={() => action.onClick(node)}
-            >{action.icon}</button>;
-          })}
-          {showDefaultRibbonActions && <>
-            <button
-              type="button"
-              title="Copy value"
-              aria-label="Copy value"
-              onClick={() => { void navigator.clipboard.writeText(formatNodeValueForCopy(node.value)); }}
-            ><CopyIcon /></button>
-            <button
-              type="button"
-              title="Copy JSON path"
-              aria-label="Copy JSON path"
-              onClick={() => { void navigator.clipboard.writeText(formatJsonPath(node.path)); }}
-            ><PathIcon /></button>
-            {editable && expandable && <button type="button" onClick={() => setAdding(v => !v)} title="Add item" aria-label="Add item"><PlusIcon /></button>}
-            {editable && <button type="button" className="danger" onClick={() => props.onDelete(node)} title="Delete row" aria-label="Delete row"><TrashIcon /></button>}
-          </>}
-        </span>}
+      </span>
+      <Ribbon node={node} items={ribbonActions} defaultGroups={defaultRibbonGroups} className="rjv-node-ribbon" />
       </span>
     </div>
     {expandable && expanded && <div className="rjv-children">

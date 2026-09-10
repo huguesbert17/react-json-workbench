@@ -31,6 +31,20 @@ export interface JsonRibbonAction {
   className?: string;
 }
 
+
+export interface JsonRibbonActionGroup {
+  /** Stable id for the group container. */
+  id: string;
+  /** Actions rendered together inside one ribbon segment. */
+  actions: JsonRibbonAction[];
+  /** Optional accessible label for the group. */
+  label?: string;
+  /** Optional styling hook for the group wrapper. */
+  className?: string;
+}
+
+export type JsonRibbonItem = JsonRibbonAction | JsonRibbonActionGroup;
+
 export interface JsonViewerProps {
   data: JsonValue;
   onChange?: (data: JsonValue) => void;
@@ -49,8 +63,9 @@ export interface JsonViewerProps {
   hideCopyButton?: boolean;
   hideDownloadButton?: boolean;
   hideThemeButton?: boolean;
-  /** Extra vertical hover-ribbon actions rendered for every matching node. */
-  ribbonActions?: JsonRibbonAction[];
+  hideFormatButton?: boolean;
+  /** Custom ribbon actions. Plain actions are grouped together; explicit groups render as separate segments. */
+  ribbonActions?: JsonRibbonItem[];
   /** Show built-in ribbon actions. Copy value/path are always available; add/delete appear when tree editing is active. */
   showDefaultRibbonActions?: boolean;
   onNodeClick?: (node: JsonNodeType) => void;

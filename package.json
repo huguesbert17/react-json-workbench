@@ -2,7 +2,7 @@
   "name": "@huguesbert17/react-json-viewer-editor",
   "version": "0.1.0",
   "private": false,
-  "description": "A lightweight, dependency-free JSON viewer and editor for React + TypeScript. It provides tree and text views, syntax highlighting, inline editing, search, copy/download actions, light and dark themes, and extensible hover ribbons for node-level actions.",
+  "description": "A lightweight JSON viewer and editor for React + TypeScript with tree/text views, extensible action ribbons, and a focused CodeMirror 6 JSON editor.",
   "keywords": [
     "json"
   ],
@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/huguesbert17/react-json-viewer-editor.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "author": "Hugues",
   "type": "module",
   "main": "index.ts",
@@ -24,13 +24,24 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "typescript": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest"
+    "@codemirror/autocomplete": "^6.0.0",
+    "@codemirror/commands": "^6.0.0",
+    "@codemirror/lang-json": "^6.0.0",
+    "@codemirror/language": "^6.0.0",
+    "@codemirror/view": "^6.0.0",
+    "@lezer/highlight": "^1.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^7.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  }
 }

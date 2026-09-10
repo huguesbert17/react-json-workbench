@@ -625,3 +625,71 @@
     display: block;
     flex: 0 0 auto;
 }
+
+/* --- CodeMirror text editor -------------------------------------------------
+   The editor itself owns text rendering and caret placement. This replaces the
+   old transparent-textarea/highlight overlay while preserving the viewer theme. */
+.rjv-codemirror {
+    width: 100%;
+    min-width: 0;
+    min-height: 360px;
+    background: var(--bg);
+}
+.rjv-codemirror .cm-editor {
+    width: 100%;
+}
+.rjv-codemirror .cm-scroller {
+    scrollbar-color: var(--muted2) transparent;
+}
+.rjv-codemirror .cm-content,
+.rjv-codemirror .cm-gutters {
+    font-variant-ligatures: none;
+}
+
+/* --- Stable tree-ribbon anchor --------------------------------------------
+   The row owns hover visibility, while this compact anchor owns positioning.
+   Keeping those responsibilities separate prevents depth-dependent drift. */
+.rjv-node-anchor {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+}
+.rjv-node-anchor > .rjv-node-ribbon {
+    right: auto;
+    left: calc(100% + 6px);
+    top: 50%;
+}
+
+/* --- Grouped ribbons -------------------------------------------------------
+   The ribbon is a lightweight positioning shell. Each group gets the same
+   surface, border and shadow treatment used by the existing ribbon UI. */
+.rjv-node-ribbon,
+.rjv-text-ribbon {
+    gap: var(--button-gap);
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+.rjv-ribbon-group {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    width: max-content;
+    background: var(--toolbar-button);
+    border: 1px solid var(--border);
+    border-radius: var(--button-radius);
+    box-shadow: var(--ribbon-shadow);
+}
+.rjv-ribbon-group button:last-child {
+    border-right: 0;
+}
+
+/* Keep the compact Format control consistent with the rest of the header. */
+.rjv-toolbar .rjv-format {
+    white-space: nowrap;
+}
