@@ -30,8 +30,8 @@
     --code-punctuation: #94a3b8;
     --toolbar-bg: #f8fafc;
     --toolbar-button: #fff;
-    --toolbar-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
-    --ribbon-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
+    --toolbar-shadow: -700 1px 2px rgb(15 23 42 / 0.08);
+    --ribbon-shadow: -700 1px 2px rgb(15 23 42 / 0.08);
     font:
         13px/1.5 Inter,
         ui-sans-serif,
